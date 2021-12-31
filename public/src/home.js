@@ -55,30 +55,30 @@ function getMostPopularBooks(books) {
   return borrows.slice(0, 5);
 }
 
+// HELPER FUNCTION LOCATED WITHIN THIS PROBLEM BELOW
+
 function getMostPopularAuthors(books, authors) {
-  // reduce authors array
-  let popularAuthors = authors.reduce((acc, author) => {
-    const {
-      id,
-      name: { first, last },
-    } = author;
-
-    let authorInfo = { name: `${first} ${last}`, count: 0 };
-    // filter boks and see if book.authorId === id given, then add to count
-    books.filter((book) =>
-      book.authorId === id ? (authorInfo.count += book.borrows.length) : null
-    );
-    acc.push(authorInfo);
-
-    return acc;
-  }, []);
-  // sort author popularity from highest count to lowest
-  popularAuthors.sort((author1, author2) =>
-    author1.count > author2.count ? -1 : 1
-  );
-
-  // return top 5 using slice
-  return popularAuthors.slice(0, 5);
+  // set empty array for the result
+  let mostPopAuthors = [];
+  // loop through book objects
+  for (let book of books) {
+    // loop through authors
+    for (let author of authors) {
+      // destructure book object
+      let { borrows, authorId } = book;
+      // assign authors
+      let fullName = `${author.name.first} ${author.name.last}`;
+      // check if id of book matches author id
+      if (authorId === author.id) {
+        // push to results array
+        mostPopAuthors.push({ name: `${fullName}`, count: borrows.length });
+      }
+    }
+  }
+  // sort result from highest to lowest
+  mostPopAuthors.sort((a, b) => (a.count > b.count ? -1 : 1));
+  //return top 5 entries
+  return mostPopAuthors.slice(0, 5);
 }
 
 module.exports = {
