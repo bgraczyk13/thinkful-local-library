@@ -58,27 +58,28 @@ function getMostPopularBooks(books) {
 // HELPER FUNCTION LOCATED WITHIN THIS PROBLEM BELOW
 
 function getMostPopularAuthors(books, authors) {
-  // set empty array for the result
   let mostPopAuthors = [];
-  // loop through book objects
-  for (let book of books) {
-    // loop through authors
-    for (let author of authors) {
-      // destructure book object
-      let { borrows, authorId } = book;
-      // assign authors
-      let fullName = `${author.name.first} ${author.name.last}`;
-      // check if id of book matches author id
+  for (const book of books) {
+    for (const author of authors) {
+      const { borrows, authorId } = book;
+
+      const fullName = `${author.name.first} ${author.name.last}`;
+
       if (authorId === author.id) {
-        // push to results array
         mostPopAuthors.push({ name: `${fullName}`, count: borrows.length });
       }
     }
   }
-  // sort result from highest to lowest
+
   mostPopAuthors.sort((a, b) => (a.count > b.count ? -1 : 1));
-  //return top 5 entries
-  return mostPopAuthors.slice(0, 5);
+  mostPopAuthors = sliceResult(mostPopAuthors);
+  return mostPopAuthors;
+}
+
+// Helper to slice results without calling .slice every single function.
+function sliceResult(input, cap = 5) {
+  const slicedResult = input.slice(0, cap);
+  return slicedResult;
 }
 
 module.exports = {
